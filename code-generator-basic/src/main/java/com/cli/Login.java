@@ -2,6 +2,7 @@ package com.cli;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.Command;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -9,11 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+@Command(name = "Login", version = "Login 1.0", mixinStandardHelpOptions = true)
 public class Login implements Callable<Integer> {
-    @Option(names = {"-u", "--user"}, description = "User name", interactive = true, required = true)
+    @Option(names = {"-u", "--user"}, arity = "0..1", description = "User name", interactive = true, required = true)
     String user;
 
-    @Option(names = {"-p", "--password"}, description = "Passphrase", interactive = true, required = true)
+    @Option(names = {"-p", "--password"}, arity = "0..1", description = "Passphrase", interactive = true, required = true)
     String password;
 
     public Integer call() throws Exception {
@@ -36,6 +38,7 @@ public class Login implements Callable<Integer> {
      * 将用户没有输入的必填参数拼接到args中
      */
     private static String[] getStrings(String[] args) {
+        if (isStandardHelpOption(args)) return args;
         List<String> missingOptions = new ArrayList<>();
         Class<Login> loginClass = Login.class;
         Field[] fields = loginClass.getDeclaredFields();
@@ -58,5 +61,9 @@ public class Login implements Callable<Integer> {
             result[index++] = optionName;
         }
         return result;
+    }
+
+    private static boolean isStandardHelpOption(String[] args) {
+        return args.length == 1 && (args[0].equals("-h") || args[0].equals("--help") || args[0].equals("-V") || args[0].equals("--version"));
     }
 }
