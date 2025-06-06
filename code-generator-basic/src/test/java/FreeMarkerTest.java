@@ -17,12 +17,12 @@ public class FreeMarkerTest {
         menuItems.add(menuItem1);
         menuItems.add(menuItem2);
         dataModel.setMenuItems(menuItems);
-        FreeMarkerUtils.generateCode(dataModel);
+        FreeMarkerUtils.process(dataModel, "code-generator-basic/src/main/myWeb.html");
 
         Loop loop = new Loop();
         loop.setAuthor("念");
         loop.setLoop(5);
-        FreeMarkerUtils.generateCode(loop);
+        FreeMarkerUtils.process(loop, "code-generator-basic/src/main/java/com/loop.java");
 
         ArrayList<User> user = new ArrayList<>();
         user.add(new User().setName("Administrator").setPassword(""));
@@ -33,6 +33,6 @@ public class FreeMarkerTest {
         user.add(new User().setName("admin").setPassword(""));
         Users users = new Users();
         users.setUsers(user);
-        FreeMarkerUtils.generateCode(users);
+        FreeMarkerUtils.process(users, "code-generator-basic/src/main/loginDates.py");
     }
 }
